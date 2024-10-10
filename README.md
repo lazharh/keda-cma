@@ -8,7 +8,7 @@ git init
 git add -A # to add all files or git add "filename"
 git commit -m "first commit"
 git branch -M master
-git remote add origin https://github.com/lazharh/keda-cma2.git
+git remote add origin https://github.com/lazharh/keda-cma.git
 git remote set-url origin  https://github.com/lazharh/keda-cma.git
 git push -u -f origin master
 ```
