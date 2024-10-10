@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: toolbox-logging
+  namespace: default
+  labels:
+    app: logging
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logging
+  template:
+    metadata:
+      labels:
+        app: logging
+    spec:
+      containers:
+      - name: loggingcontainer
+        image: fedora:latest
+        command:
+       # - sleep
+       # - inf
+        - /bin/sh
+        - -c
+        - >
+          i=0;
+          while true;
+          do
+            echo "$i: $(date)" >> /var/log/1.log;
+            echo "$(date) INFO $i" >> /var/log/2.log;
+            i=$((i+1));
+            sleep 1;
+          done
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      - name: count-log-1
+        image: fedora:latest
+        args: [/bin/sh, -c, 'tail -n+1 -F /var/log/1.log']
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+      - name: count-log-2
+        image: fedora:latest
+        args: [/bin/sh, -c, 'tail -n+1 -F /var/log/2.log']
+        volumeMounts:
+        - name: varlog
+          mountPath: /var/log
+
+      volumes:
+      - name: varlog
+        persistentVolumeClaim:
+          claimName: pvc-log

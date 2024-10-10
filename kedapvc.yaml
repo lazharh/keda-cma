@@ -1,0 +1,16 @@
+## user lvms on SNO
+## pvc will show pending (not bound) until creating the POD/Deployment that consumes it because storageClass lvms-vg1 is of type WaitForFirstConsumer
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: kedapvc
+  namespace: openshift-keda
+spec:
+  accessModes:
+    - ReadWriteMany
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: ocs-storagecluster-cephfs
