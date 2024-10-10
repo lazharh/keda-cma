@@ -1,7 +1,7 @@
 ### to intialize the repod create a new repository on the command line
 
 ```
-gh repo create github.com/lazharh/keda-cma2.git --private  # --public if you wish 
+gh repo create github.com/lazharh/keda-cma.git --private  # --public if you wish 
 echo "# keda-cma" >> README.md
 create more files
 git init
