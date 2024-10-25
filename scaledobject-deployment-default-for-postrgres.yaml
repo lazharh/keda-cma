@@ -1,0 +1,28 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: autoscaler-ceph-helth-postgresql
+  namespace: default
+spec:
+  cooldownPeriod: 60
+  maxReplicaCount: 1
+  minReplicaCount: 0
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: postgresql-db
+  triggers:
+  - type: prometheus
+    metadata:
+      serverAddress: https://prometheus-k8s.openshift-monitoring.svc.cluster.local:9091
+      namespace: default
+      metricName: ceph_health_status
+      threshold: '2'
+      activationThreshold: '1'
+      query: 2-ceph_health_status
+      authModes: "bearer"
+      ignoreNullValues: "false"
+      unsafeSsl: "true"
+    authenticationRef: 
+      name: keda-trigger-auth-prometheus
+      kind: TriggerAuthentication
